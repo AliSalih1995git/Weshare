@@ -8,8 +8,13 @@ import './style.css';
 import Cover from './Cover';
 import ProfilePictureInfos from './ProfilePictureInfos';
 import ProfileMenu from './ProfileMenu';
+import PplYouMayKnow from './PplYouMayKnow';
+import CreatePost from '../../components/createPost';
+import GridPosts from './GridPosts';
+import Post from '../../components/post';
+import Photos from './Photos';
 
-function Profile() {
+function Profile({ setVisible }) {
   const navigate = useNavigate();
   const { username } = useParams();
   const { user } = useSelector((state) => ({ ...state }));
@@ -22,10 +27,12 @@ function Profile() {
   useEffect(() => {
     getProfile();
   }, [userName]);
+  var visitor = userName === user.username ? false : true;
+
   const getProfile = async () => {
     try {
       dispatch({
-        type: "PROFILE_REQUEST",
+        type: 'PROFILE_REQUEST',
       });
       const { data } = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}/getProfile/${userName}`,
@@ -36,16 +43,16 @@ function Profile() {
         }
       );
       if (data.ok === false) {
-        navigate("/profile");
+        navigate('/profile');
       } else {
         dispatch({
-          type: "PROFILE_SUCCESS",
+          type: 'PROFILE_SUCCESS',
           payload: data,
         });
       }
     } catch (error) {
       dispatch({
-        type: "PROFILE_ERROR",
+        type: 'PROFILE_ERROR',
         payload: error.response.data.message,
       });
     }
@@ -55,9 +62,36 @@ function Profile() {
       <Header page="profile" />;
       <div className="profile_top">
         <div className="profile_container">
-      <Cover cover={profile.cover}/>
-      <ProfilePictureInfos profile={profile}/>
-      <ProfileMenu/>
+          <Cover cover={profile.cover} visitor={visitor} />
+          <ProfilePictureInfos profile={profile} visitor={visitor} />
+          <ProfileMenu />
+        </div>
+      </div>
+      <div className="profile_bottom">
+        <div className="profile_container">
+          <div className="bottom_container">
+            <PplYouMayKnow />
+            <div className="profile_grid">
+              <div className="profile_left">
+                <Photos/>
+              </div>
+              <div className="profile_right">
+                {!visitor && (
+                  <CreatePost user={user} profile setVisible={setVisible} />
+                )}
+                <GridPosts />
+                <div className="posts">
+                  {profile.posts && profile.posts.length ? (
+                    profile.posts.map((post) => (
+                      <Post post={post} user={user} key={post._id} profile />
+                    ))
+                  ) : (
+                    <div className="no_posts">No posts available</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

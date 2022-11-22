@@ -4,6 +4,7 @@ const {
   validateUsername,
 } = require('../helpers/validation');
 const User = require('../models/User');
+const Post = require('../models/Post');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../helpers/tokens');
@@ -231,7 +232,8 @@ exports.getProfile = async (req, res) => {
     if (!profile) {
       return res.json({ ok: false });
     }
-    res.json(profile);
+    const posts = await Post.find({ user: profile._id }).populate('user');
+    res.json({ ...profile.toObject(), posts });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
