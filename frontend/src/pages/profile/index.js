@@ -13,6 +13,7 @@ import CreatePost from '../../components/createPost';
 import GridPosts from './GridPosts';
 import Post from '../../components/post';
 import Photos from './Photos';
+import Friends from './Friends';
 
 function Profile({ setVisible }) {
   const navigate = useNavigate();
@@ -73,7 +74,11 @@ function Profile({ setVisible }) {
             <PplYouMayKnow />
             <div className="profile_grid">
               <div className="profile_left">
-                <Photos/>
+                <Photos username={userName} token={user.token} />
+                <Friends friends={profile.friends} />
+                <div
+                  className='relative_copyright'
+                ></div>
               </div>
               <div className="profile_right">
                 {!visitor && (
