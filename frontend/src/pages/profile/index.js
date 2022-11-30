@@ -14,11 +14,13 @@ import GridPosts from './GridPosts';
 import Post from '../../components/post';
 import Photos from './Photos';
 import Friends from './Friends';
+import Intro from '../../components/intro';
 
 function Profile({ setVisible }) {
   const navigate = useNavigate();
   const { username } = useParams();
   const { user } = useSelector((state) => ({ ...state }));
+  const [photos, setPhotos] = useState({});
   var userName = username === undefined ? user.username : username;
   const [{ loading, error, profile }, dispatch] = useReducer(profileReducer, {
     loading: false,
@@ -29,6 +31,9 @@ function Profile({ setVisible }) {
     getProfile();
   }, [userName]);
   var visitor = userName === user.username ? false : true;
+  const path = `${userName}/*`;
+  const max = 30;
+  const sort = 'desc';
 
   const getProfile = async () => {
     try {
@@ -46,6 +51,20 @@ function Profile({ setVisible }) {
       if (data.ok === false) {
         navigate('/profile');
       } else {
+        try {
+          const images = await axios.post(
+            `${process.env.REACT_APP_BACKEND_URL}/listImages`,
+            { path, sort, max },
+            {
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+              },
+            }
+          );
+          setPhotos(images.data);
+        } catch (error) {
+          console.log(error);
+        }
         dispatch({
           type: 'PROFILE_SUCCESS',
           payload: data,
@@ -63,8 +82,16 @@ function Profile({ setVisible }) {
       <Header page="profile" />;
       <div className="profile_top">
         <div className="profile_container">
-          <Cover cover={profile.cover} visitor={visitor} />
-          <ProfilePictureInfos profile={profile} visitor={visitor} />
+          <Cover
+            cover={profile.cover}
+            visitor={visitor}
+            photos={photos.resources}
+          />
+          <ProfilePictureInfos
+            profile={profile}
+            visitor={visitor}
+            photos={photos.resources}
+          />
           <ProfileMenu />
         </div>
       </div>
@@ -74,11 +101,14 @@ function Profile({ setVisible }) {
             <PplYouMayKnow />
             <div className="profile_grid">
               <div className="profile_left">
-                <Photos username={userName} token={user.token} />
+                <Intro details={profile.details} />
+                <Photos
+                  username={userName}
+                  token={user.token}
+                  photos={photos}
+                />
                 <Friends friends={profile.friends} />
-                <div
-                  className='relative_copyright'
-                ></div>
+                <div className="relative_copyright"></div>
               </div>
               <div className="profile_right">
                 {!visitor && (

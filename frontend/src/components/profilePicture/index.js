@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { photosReducer } from '../../functions/reducer';
 import useClickOutside from '../../helpers/clickOutside';
 import './style.css';
 import UpdateProfilePicture from './UpdateProfilePicture';
 
-export default function ProfilePicture({ setShow,pRef }) {
-   const popup=useRef(null);
-   useClickOutside(popup,()=>setShow(false));
+export default function ProfilePicture({ setShow, pRef, photos }) {
+  const popup = useRef(null);
+  const { user } = useSelector((state) => ({ ...state }));
+  // useClickOutside(popup, () => setShow(false));
   const refInput = useRef(null);
   const [image, setImage] = useState('');
   const [error, setError] = useState('');
@@ -69,7 +72,38 @@ export default function ProfilePicture({ setShow,pRef }) {
             </button>
           </div>
         )}
-        <div className="old_pictures_wrap"></div>
+        <div className="old_pictures_wrap scrollbar">
+          <div>Your Profile pictures</div>
+          <div className="old_pictures">
+            {photos
+              .filter(
+                (img) => img.folder === `${user.username}/profile_picture`
+              )
+              .map((photo) => (
+                <img
+                  src={photo.secure_url}
+                  key={photo.public_id}
+                  alt=""
+                  onClick={() => setImage(photo.secure_url)}
+                />
+              ))}
+          </div>
+          <div>Other pictures</div>
+          <div className="old_pictures">
+            {photos
+              .filter(
+                (img) => img.folder !== `${user.username}/profile_picture`
+              )
+              .map((photo) => (
+                <img
+                  src={photo.secure_url}
+                  key={photo.public_id}
+                  alt=""
+                  onClick={() => setImage(photo.secure_url)}
+                />
+              ))}
+          </div>
+        </div>
       </div>
       {image && (
         <UpdateProfilePicture

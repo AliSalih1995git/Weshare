@@ -2,45 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useReducer } from 'react';
 import { photosReducer } from '../../functions/reducer';
 
-export default function Photos({ username, token }) {
-  const [{ loading, error, photos }, dispatch] = useReducer(photosReducer, {
-    loading: false,
-    photos: {},
-    error: '',
-  });
-  useEffect(() => {
-    getPhotos();
-  }, [username]);
-  const path = `${username}/*`;
-  const max = 30;
-  const sort = 'desc';
-
-  const getPhotos = async () => {
-    try {
-      dispatch({
-        type: 'PHOTOS_REQUEST',
-      });
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/listImages`,
-        { path, sort, max },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      dispatch({
-        type: 'PHOTOS_SUCCESS',
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: 'PHOTOS_ERROR',
-        payload: error.response.data.message,
-      });
-    }
-  };
+export default function Photos({ username, token, photos }) {
   return (
     <div className="profile_card">
       <div className="profile_card_header">
@@ -49,9 +11,9 @@ export default function Photos({ username, token }) {
       </div>
       <div className="profile_card_count">
         {photos.total_count === 0
-          ? ""
+          ? ''
           : photos.total_count === 1
-          ? "1 Photo"
+          ? '1 Photo'
           : `${photos.total_count} photos`}
       </div>
       <div className="profile_card_grid">
