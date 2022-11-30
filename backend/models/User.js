@@ -116,7 +116,7 @@ const userSchema = mongoose.Schema(
         type: String,
         enum: ['Single', 'In a relationship', 'Married', 'Divorced'],
       },
-      instagram: {
+      instagoram: {
         type: String,
       },
     },
