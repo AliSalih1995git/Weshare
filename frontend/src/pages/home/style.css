@@ -155,18 +155,40 @@
   .create_story_card {
     height: 30vw;
   }
-  .createPost,
-  .post,
-  .send_verification_icon {
+  .createPost_icon {
     font-size: 12px;
   }
   .open_post {
     font-size: 16px;
   }
-  .createPost,
-  .post,
-  .send_verification_icon svg {
+  .createPost_icon svg {
     width: 20px;
+  }
+}
+@media (max-width: 400px) {
+  .createPost,
+  .post {
+    margin-top: 1rem;
+  }
+  .home_middle,
+  .createPost,
+  .post {
+    width: 98%;
+    margin: 1rem auto;
+  }
+  .send_verification {
+    width: 98%;
+    margin: 0 auto;
+  }
+  .stories {
+    grid-template-columns: repeat(6, 13vw);
+    padding-left: 10px;
+  }
+  .home_middle {
+    margin: 56px auto;
+  }
+  .createPost_body {
+    padding: 5px 0;
   }
 }
 /*-----Activate popup----*/
