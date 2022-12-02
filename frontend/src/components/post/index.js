@@ -3,13 +3,23 @@ import './style.css';
 import Moment from 'react-moment';
 import { Dots, Public } from '../../svg';
 import ReactsPopup from './ReactsPopup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CreateComment from './CreateComment';
 import PostMenu from './PostMenu';
+import Comment from './Comment';
 export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
+  const [count, setCount] = useState(1);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    setComments(post?.comments);
+  }, [post]);
+  const showMore = () => {
+    setCount((prev) => prev + 3);
+  };
   return (
     <div className="post" style={{ width: `${profile && '100%'}` }}>
       <div className="post_header">
@@ -104,7 +114,7 @@ export default function Post({ post, user, profile }) {
           <div className="reacts_count_num"></div>
         </div>
         <div className="to_right">
-          <div className="comments_count">13 comments</div>
+          <div className="comments_count">{comments.length} comments</div>
           <div className="share_count">1 share</div>
         </div>
       </div>
@@ -137,7 +147,20 @@ export default function Post({ post, user, profile }) {
       </div>
       <div className="comments_wrap">
         <div className="comments_order"></div>
-        <CreateComment user={user} />
+        <CreateComment user={user} postId={post._id} setCount={setCount} />
+        {comments &&
+          comments
+            .sort((a, b) => {
+              return new Date(b.commentAt) - new Date(a.commentAt);
+            })
+            .slice(0, count)
+            .map((comment, i) => <Comment comment={comment} key={i} />)}
+        {count < comments.length && (
+          <div className="view_comments" onClick={() => showMore()}>
+            {' '}
+            View more Comments{' '}
+          </div>
+        )}
       </div>
       {showMenu && (
         <PostMenu
