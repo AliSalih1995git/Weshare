@@ -33,12 +33,10 @@ export default function Post({ post, user, profile }) {
               {post.user.first_name} {post.user.last_name}
               <div className="updated_p">
                 {post.type === 'profilePicture' &&
-                  `updated ${
-                    post.user.gender === 'male' ? 'his' : 'her'
+                  `updated ${post.user.gender === 'male' ? 'his' : 'her'
                   } profile picture`}
                 {post.type === 'coverPicture' &&
-                  `updated ${
-                    post.user.gender === 'male' ? 'his' : 'her'
+                  `updated ${post.user.gender === 'male' ? 'his' : 'her'
                   } cover picture`}
               </div>
             </div>
@@ -73,12 +71,12 @@ export default function Post({ post, user, profile }) {
                 post.images.length === 1
                   ? 'grid_1'
                   : post.images.length === 2
-                  ? 'grid_2'
-                  : post.images.length === 3
-                  ? 'grid_3'
-                  : post.images.length === 4
-                  ? 'grid_4'
-                  : post.images.length >= 5 && 'grid_5'
+                    ? 'grid_2'
+                    : post.images.length === 3
+                      ? 'grid_3'
+                      : post.images.length === 4
+                        ? 'grid_4'
+                        : post.images.length >= 5 && 'grid_5'
               }
             >
               {post.images.slice(0, 5).map((image, i) => (

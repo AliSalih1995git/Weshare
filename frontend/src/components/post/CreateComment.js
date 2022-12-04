@@ -139,7 +139,7 @@ export default function CreateComment({ user, postId, setCount }) {
           </div>
         </div>
       </div>
-      {commentImage && (
+       {commentImage && (
         <div className="comment_img_preview">
           <img src={commentImage} alt="" />
           <div

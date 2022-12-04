@@ -30,6 +30,7 @@ export const createPost = async (
   }
 };
 
+
 export const comment = async (postId, comment, image, token) => {
   console.log(postId, comment, image, token);
   try {
