@@ -185,6 +185,20 @@ exports.findUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(400).json({
+        message: 'Account does not exists.',
+      });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 exports.sendResetPasswordCode = async (req, res) => {
   try {
     const { email } = req.body;
@@ -232,7 +246,13 @@ exports.getProfile = async (req, res) => {
     if (!profile) {
       return res.json({ ok: false });
     }
-    const posts = await Post.find({ user: profile._id }).populate('user').sort({createdAt:-1});
+    const posts = await Post.find({ user: profile._id })
+      .populate('user')
+      .populate(
+        'comments.commentBy',
+        'first_name last_name picture username commentAt'
+      )
+      .sort({ createdAt: -1 });
     res.json({ ...profile.toObject(), posts });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -242,7 +262,7 @@ exports.getProfile = async (req, res) => {
 exports.updateProfilePicture = async (req, res) => {
   try {
     const { url } = req.body;
-     await User.findByIdAndUpdate(req.user.id, {
+    await User.findByIdAndUpdate(req.user.id, {
       picture: url,
     });
     res.json(url);
@@ -253,7 +273,7 @@ exports.updateProfilePicture = async (req, res) => {
 exports.updateCover = async (req, res) => {
   try {
     const { url } = req.body;
-     await User.findByIdAndUpdate(req.user.id, {
+    await User.findByIdAndUpdate(req.user.id, {
       cover: url,
     });
     res.json(url);
