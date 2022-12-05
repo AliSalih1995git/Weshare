@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -16,6 +15,7 @@ import Photos from './Photos';
 import Friends from './Friends';
 import Intro from '../../components/intro';
 import { useMediaQuery } from 'react-responsive';
+import instance from '../../api/instance';
 
 function Profile({ setVisible }) {
   const navigate = useNavigate();
@@ -45,27 +45,24 @@ function Profile({ setVisible }) {
       dispatch({
         type: 'PROFILE_REQUEST',
       });
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/getProfile/${userName}`,
+      const { data } = await instance(
         {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
+          url: `getProfile/${userName}`,
+          method: "GET",
         }
       );
       if (data.ok === false) {
         navigate('/profile');
       } else {
         try {
-          const images = await axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}/listImages`,
-            { path, sort, max },
+          const images = await instance(
             {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-              },
+              url: "listImages",
+              method: "POST",
+              data: { path, sort, max },
             }
           );
+          // console.log(images.data);
           setPhotos(images.data);
         } catch (error) {
           console.log(error);
@@ -125,14 +122,13 @@ function Profile({ setVisible }) {
           <div className="bottom_container">
             <PplYouMayKnow />
             <div
-              className={`profile_grid ${
-                check && scrollHeight >= height && leftHeight > 1000
+              className={`profile_grid ${check && scrollHeight >= height && leftHeight > 1000
                   ? 'scrollFixed showLess'
                   : check &&
-                    scrollHeight >= height &&
-                    leftHeight < 1000 &&
-                    'scrollFixed showMore'
-              }`}
+                  scrollHeight >= height &&
+                  leftHeight < 1000 &&
+                  'scrollFixed showMore'
+                }`}
             >
               <div className="profile_left" ref={leftSide}>
                 <Intro detailss={profile.details} setOthername={setOthername} />

@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import instance from '../../api/instance';
 import Bio from './Bio';
 import EditDetails from './EditDetails';
 
@@ -31,15 +31,11 @@ export default function Intro({ detailss, visitor,setOthername }) {
 
   const updateDetails = async () => {
     try {
-      const { data } = await axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/updateDetails`,
+      const { data } = await instance(
         {
-          infos,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
+          url:"updateDetails",
+          method:"PUT",
+          data:{infos,}
         }
       );
       setShowBio(false);

@@ -9,8 +9,8 @@ import Activate from './pages/home/activate';
 import Reset from './pages/reset';
 import CreatePostPopup from './components/createPostPopup';
 import { useEffect, useReducer, useState } from 'react';
-import axios from 'axios';
 import { postsReducer } from './functions/reducer';
+import instance from './api/instance';
 
 
 
@@ -30,12 +30,10 @@ function App() {
       dispatch({
         type: 'POSTS_REQUEST',
       });
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/getAllPosts`,
+      const { data } = await instance(
         {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
+          url: "getAllPosts",
+        method: "GET",
         }
       );
       dispatch({
