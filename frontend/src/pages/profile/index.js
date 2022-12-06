@@ -1,32 +1,33 @@
-import { useEffect, useReducer, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { profileReducer } from '../../functions/reducer';
+import axios from "axios";
+import { useEffect, useReducer, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import "./style.css";
 import Header from '../../components/header';
-import './style.css';
-import Cover from './Cover';
-import ProfilePictureInfos from './ProfilePictureInfos';
-import ProfileMenu from './ProfileMenu';
-import PplYouMayKnow from './PplYouMayKnow';
-import CreatePost from '../../components/createPost';
-import GridPosts from './GridPosts';
-import Post from '../../components/post';
-import Photos from './Photos';
-import Friends from './Friends';
-import Intro from '../../components/intro';
-import { useMediaQuery } from 'react-responsive';
-import instance from '../../api/instance';
 
-function Profile({ setVisible }) {
-  const navigate = useNavigate();
+import Cover from "./Cover";
+import { useMediaQuery } from "react-responsive";
+import { profileReducer } from "../../functions/reducer";
+import ProfilePictureInfos from "./ProfilePictureInfos";
+import ProfileMenu from "./ProfileMenu";
+import PplYouMayKnow from "./PplYouMayKnow";
+import Intro from "../../components/intro";
+import Photos from "./Photos";
+import Friends from "./Friends";
+import CreatePost from "../../components/createPost";
+import GridPosts from "./GridPosts";
+import Post from "../../components/post";
+export default function Profile({ setVisible }) {
   const { username } = useParams();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => ({ ...state }));
   const [photos, setPhotos] = useState({});
   var userName = username === undefined ? user.username : username;
+
   const [{ loading, error, profile }, dispatch] = useReducer(profileReducer, {
     loading: false,
     profile: {},
-    error: '',
+    error: "",
   });
   useEffect(() => {
     getProfile();
@@ -34,47 +35,51 @@ function Profile({ setVisible }) {
   useEffect(() => {
     setOthername(profile?.details?.otherName);
   }, [profile]);
+
   var visitor = userName === user.username ? false : true;
   const [othername, setOthername] = useState();
   const path = `${userName}/*`;
   const max = 30;
-  const sort = 'desc';
+  const sort = "desc";
 
   const getProfile = async () => {
     try {
       dispatch({
-        type: 'PROFILE_REQUEST',
+        type: "PROFILE_REQUEST",
       });
-      const { data } = await instance(
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/getProfile/${userName}`,
         {
-          url: `getProfile/${userName}`,
-          method: "GET",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
         }
       );
       if (data.ok === false) {
-        navigate('/profile');
+        navigate("/profile");
       } else {
         try {
-          const images = await instance(
+          const images = await axios.post(
+            `${process.env.REACT_APP_BACKEND_URL}/listImages`,
+            { path, sort, max },
             {
-              url: "listImages",
-              method: "POST",
-              data: { path, sort, max },
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+              },
             }
           );
-          // console.log(images.data);
           setPhotos(images.data);
         } catch (error) {
           console.log(error);
         }
         dispatch({
-          type: 'PROFILE_SUCCESS',
+          type: "PROFILE_SUCCESS",
           payload: data,
         });
       }
     } catch (error) {
       dispatch({
-        type: 'PROFILE_ERROR',
+        type: "PROFILE_ERROR",
         payload: error.response.data.message,
       });
     }
@@ -87,20 +92,21 @@ function Profile({ setVisible }) {
   useEffect(() => {
     setHeight(profileTop.current.clientHeight + 300);
     setLeftHeight(leftSide.current.clientHeight);
-    window.addEventListener('scroll', getScroll, { passive: true });
+    window.addEventListener("scroll", getScroll, { passive: true });
     return () => {
-      window.addEventListener('scroll', getScroll, { passive: true });
+      window.addEventListener("scroll", getScroll, { passive: true });
     };
   }, [loading, scrollHeight]);
   const check = useMediaQuery({
-    query: '(max-width:901px)',
+    query: "(min-width:901px)",
   });
   const getScroll = () => {
     setScrollHeight(window.pageYOffset);
   };
+  console.log(profile);
   return (
     <div className="profile">
-      <Header page="profile" />;
+      <Header page="profile" />
       <div className="profile_top" ref={profileTop}>
         <div className="profile_container">
           <Cover
@@ -122,23 +128,43 @@ function Profile({ setVisible }) {
           <div className="bottom_container">
             <PplYouMayKnow />
             <div
-              className={`profile_grid ${check && scrollHeight >= height && leftHeight > 1000
-                  ? 'scrollFixed showLess'
+              className={`profile_grid ${
+                check && scrollHeight >= height && leftHeight > 1000
+                  ? "scrollFixed showLess"
                   : check &&
-                  scrollHeight >= height &&
-                  leftHeight < 1000 &&
-                  'scrollFixed showMore'
-                }`}
+                    scrollHeight >= height &&
+                    leftHeight < 1000 &&
+                    "scrollFixed showMore"
+              }`}
             >
               <div className="profile_left" ref={leftSide}>
-                <Intro detailss={profile.details} setOthername={setOthername} />
+                <Intro
+                  detailss={profile.details}
+                  visitor={visitor}
+                  setOthername={setOthername}
+                />
                 <Photos
                   username={userName}
                   token={user.token}
                   photos={photos}
                 />
                 <Friends friends={profile.friends} />
-                <div className="relative_copyright"></div>
+                <div className="relative_fb_copyright">
+                  <Link to="/">Privacy </Link>
+                  <span>. </span>
+                  <Link to="/">Terms </Link>
+                  <span>. </span>
+                  <Link to="/">Advertising </Link>
+                  <span>. </span>
+                  <Link to="/">
+                    Ad Choices <i className="ad_choices_icon"></i>{" "}
+                  </Link>
+                  <span>. </span>
+                  <Link to="/"></Link>Cookies <span>. </span>
+                  <Link to="/">More </Link>
+                  <span>. </span> <br />
+                  Meta © 2022
+                </div>
               </div>
               <div className="profile_right">
                 {!visitor && (
@@ -162,5 +188,3 @@ function Profile({ setVisible }) {
     </div>
   );
 }
-
-export default Profile;

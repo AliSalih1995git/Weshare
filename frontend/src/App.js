@@ -10,7 +10,7 @@ import Reset from './pages/reset';
 import CreatePostPopup from './components/createPostPopup';
 import { useEffect, useReducer, useState } from 'react';
 import { postsReducer } from './functions/reducer';
-import instance from './api/instance';
+import axios from 'axios';
 
 
 
@@ -24,16 +24,18 @@ function App() {
   });
   useEffect(() => {
     getAllPosts();
-  }, []);
+  }, [user]);
   const getAllPosts = async () => {
     try {
       dispatch({
         type: 'POSTS_REQUEST',
       });
-      const { data } = await instance(
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/getAllposts`,
         {
-          url: "getAllPosts",
-        method: "GET",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
         }
       );
       dispatch({

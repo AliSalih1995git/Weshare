@@ -31,12 +31,7 @@ export default function Intro({ detailss, visitor,setOthername }) {
 
   const updateDetails = async () => {
     try {
-      const { data } = await instance(
-        {
-          url:"updateDetails",
-          method:"PUT",
-          data:{infos,}
-        }
+      const { data } = await instance.get("updateDetails",{infos,}
       );
       setShowBio(false);
       setDetails(data);
