@@ -10,15 +10,15 @@ export default function Friends({ friends }) {
           {friends.length === 0
             ? ''
             : friends.length === 1
-            ? '1 Photo'
-            : `${friends.length} photos`}
+              ? '1 Friend'
+              : `${friends.length} Friends`}
         </div>
       )}
       <div className="profile_card_grid">
         {friends &&
           friends
             .slice(0, 9)
-            .map((friend) => <div className="profile_photo_card"></div>)}
+            .map((friend, i) => <div className="profile_photo_card" key={i} > </div>)}
       </div>
     </div>
   );

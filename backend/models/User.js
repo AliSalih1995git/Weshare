@@ -66,27 +66,35 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    friends: {
-      type: Array,
-      default: [],
-    },
-    following: {
-      type: Array,
-      default: [],
-    },
-    followers: {
-      type: Array,
-      default: [],
-    },
-    requests: {
-      type: Array,
-      default: [],
-    },
+    friends: [
+      {
+        type: ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: ObjectId,
+        ref: "User",
+      },
+    ],
+    followers: [
+      {
+        type: ObjectId,
+        ref: "User",
+      },
+    ],
+    requests: [
+      {
+        type: ObjectId,
+        ref: "User",
+      },
+    ],
     search: [
       {
         user: {
           type: ObjectId,
-          ref: 'User',
+          ref: "User",
         },
       },
     ],
@@ -109,6 +117,9 @@ const userSchema = mongoose.Schema(
       collage: {
         type: String,
       },
+      currentCity: {
+        type: String,
+      },
       hometown: {
         type: String,
       },
@@ -116,9 +127,7 @@ const userSchema = mongoose.Schema(
         type: String,
         enum: ['Single', 'In a relationship', 'Married', 'Divorced'],
       },
-      instagoram: {
-        type: String,
-      },
+      
     },
     savedPosts: [
       {
