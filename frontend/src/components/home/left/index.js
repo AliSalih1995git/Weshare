@@ -25,11 +25,11 @@ export default function LeftHome({ user }) {
           notification={link.notification}
         />
       ))}
-      <div className="left_link hover1">
+      <Link to="/messenger" className="left_link hover1">
         <img src='../left/messenger.png' alt="" />
         <span>Messanger</span>
         
-      </div>
+      </Link>
       {!visible && (
         <div
           className="left_link hover1"
