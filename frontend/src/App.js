@@ -11,6 +11,7 @@ import CreatePostPopup from './components/createPostPopup';
 import { useEffect, useReducer, useState } from 'react';
 import { postsReducer } from './functions/reducer';
 import axios from 'axios';
+import Messanger from './pages/messenger/Messanger';
 
 
 
@@ -63,6 +64,7 @@ function App() {
             exact
           />
           <Route path="/activate/:token" element={<Activate />} exact />
+          <Route path="/messenger" element={<Messanger />} exact />
         </Route>
 
         <Route element={<NotLoggedInRoutes />}>

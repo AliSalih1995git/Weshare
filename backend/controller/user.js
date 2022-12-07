@@ -185,6 +185,20 @@ exports.findUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(400).json({
+        message: 'Account does not exists.',
+      });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 exports.sendResetPasswordCode = async (req, res) => {
   try {
     const { email } = req.body;
@@ -240,28 +254,8 @@ exports.getProfile = async (req, res) => {
     if (!profile) {
       return res.json({ ok: false });
     }
-
-    if (
-      user.friends.includes(profile._id) &&
-      profile.friends.includes(user._id)
-    ) {
-      friendship.friends = true;
-    }
-    if (user.following.includes(profile._id)) {
-      friendship.following = true;
-    }
-    if (user.requests.includes(profile._id)) {
-      friendship.requestReceived = true;
-    }
-    if (profile.requests.includes(user._id)) {
-      friendship.requestSent = true;
-    }
-
-    const posts = await Post.find({ user: profile._id })
-      .populate("user")
-      .sort({ createdAt: -1 });
-      await profile.populate("friends", "first_name last_name username picture");
-    res.json({ ...profile.toObject(), posts, friendship });
+    const posts = await Post.find({ user: profile._id }).populate('user').sort({createdAt:-1});
+    res.json({ ...profile.toObject(), posts });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

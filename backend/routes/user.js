@@ -19,6 +19,7 @@ const {
   acceptRequest,
   unfriend,
   deleteRequest,
+  getUser,
 } = require('../controller/user');
 const { authUser } = require('../middlwares/auth');
 const router = express.Router();
@@ -28,6 +29,7 @@ router.post('/activate', authUser, activateAccount);
 router.post('/login', login);
 router.post('/sendVerification', authUser, sendVerification);
 router.post('/findUser', findUser);
+router.get('/getUser/:id',getUser);
 router.post('/sendResetPasswordCode', sendResetPasswordCode);
 router.post('/validateResetCode', validateResetCode);
 router.post('/ChangePassword', ChangePassword);
