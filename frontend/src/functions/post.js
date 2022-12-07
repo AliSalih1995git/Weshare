@@ -1,5 +1,6 @@
+import axios from 'axios';
+import instance from '../api/instance';
 
-import axios from "axios";
 export const createPost = async (
   type,
   background,
@@ -15,22 +16,39 @@ export const createPost = async (
         type,
         background,
         text,
-        images, 
+        images,
         user,
-      }, 
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    return "ok";
+    return 'ok';
   } catch (error) {
     return error.response.data.message;
   }
 };
-
-
+export const reactPost = async (postId, react, token) => {
+  try {
+    const { data } = await instance.put('reactPost', {
+      postId,
+      react,
+    });
+    return 'ok';
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+export const getReacts = async (postId, token) => {
+  try {
+    const { data } = await instance.get(`/getReacts/${postId}`);
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
 export const comment = async (postId, comment, image, token) => {
   console.log(postId, comment, image, token);
   try {
