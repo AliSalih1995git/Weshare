@@ -3,26 +3,34 @@ import { useEffect, useState } from 'react';
 import './style.css';
 
 export default function Conversation({ conversation, currentUser }) {
-  const [user, setUser] = useState(null);
-  // console.log(currentUser + "currentuser");
+  const [users, setUsers] = useState(null);
+
   useEffect(() => {
-    const friendId = conversation.members.find((m) => m !== currentUser._id);
-    // console.log(friendId + "fsdf");
+    const friendId = conversation.members.find((m) => m !== currentUser.id);
+    console.log(friendId + 'AAAAAAAA');
     const getUser = async () => {
       try {
-        const res = await axios(`${process.env.REACT_APP_BACKEND_URL}/getUser/${user.id}`)
-        console.log(res);
+        const res=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/getUser/${friendId}`,{
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+          },
+        });
+        setUsers(res.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    getUser()
+    };
+    getUser();
   }, [currentUser, conversation]);
-
+  console.log(users, 'aaaaaaaaa');
   return (
     <div className="conversation">
-      <img className="conversationImg" src="https://res.cloudinary.com/dpnark7pd/image/upload/v1669349105/Alisalih/profile_picture/loxuab43po1wgonl9lqg.jpg" alt="" />
-      <span className='conversationName' >gfdg</span>
+      <img
+        className="conversationImg"
+        src={users?.picture}
+        alt=""
+      />
+      <span className="conversationName"> {users?.username} </span>
     </div>
-  )
+  );
 }

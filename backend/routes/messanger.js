@@ -8,7 +8,7 @@ router.get('/conversation/:userId', getConversation);
 router.get('/conversation/find/:firstUserId/:secondUserId', getFirstSecondConversation);
 
 router.post('/messagePost', messagePost);
-router.get('/messageGet/:conversationId', messageGet);
+router.get('/messageGet/:conversationId', messageGet); 
 
 
 module.exports = router;
