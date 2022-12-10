@@ -15,7 +15,7 @@ function Home({ setVisible, posts, loading, getAllPosts }) {
   const [height, setHeight] = useState();
   useEffect(() => {
     setHeight(middle.current.clientHeight);
-  }, [loading, height]);
+  }, [loading, height, setVisible]);
   return (
     <div className="home" style={{ height: `${height + 150}px` }}>
       <Header page="home" getAllPosts={getAllPosts} />
