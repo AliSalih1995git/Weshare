@@ -1,35 +1,35 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
 const userSchema = mongoose.Schema(
   {
     first_name: {
       type: String,
-      require: [true, 'First name is required'],
+      require: [true, "First name is required"],
       trim: true,
       text: true,
     },
     last_name: {
       type: String,
-      require: [true, 'Last name is required'],
+      require: [true, "Last name is required"],
       trim: true,
       text: true,
     },
     username: {
       type: String,
-      require: [true, 'Username is required'],
+      require: [true, "Username is required"],
       trim: true,
       text: true,
       unique: true,
     },
     email: {
       type: String,
-      require: [true, 'Email is required'],
+      require: [true, "Email is required"],
       trim: true,
     },
     password: {
       type: String,
-      require: [true, 'Password is required'],
+      require: [true, "Password is required"],
       trim: true,
     },
     picture: {
@@ -44,7 +44,7 @@ const userSchema = mongoose.Schema(
     },
     gender: {
       type: String,
-      require: [true, 'Gender is required'],
+      require: [true, "Gender is required"],
       trim: true,
     },
     bYear: {
@@ -125,19 +125,18 @@ const userSchema = mongoose.Schema(
       },
       realtionship: {
         type: String,
-        enum: ['Single', 'In a relationship', 'Married', 'Divorced'],
+        enum: ["Single", "In a relationship", "Married", "Divorced"],
       },
-      
     },
     savedPosts: [
       {
         post: {
           type: ObjectId,
-          ref: 'Post',
+          ref: "Post",
         },
         savedAt: {
           type: Date,
-          default: new Date(),
+          required: true,
         },
       },
     ],
@@ -147,4 +146,4 @@ const userSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

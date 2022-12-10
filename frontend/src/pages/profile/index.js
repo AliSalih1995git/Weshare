@@ -3,7 +3,7 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./style.css";
-import Header from '../../components/header';
+import Header from "../../components/header";
 
 import Cover from "./Cover";
 import { useMediaQuery } from "react-responsive";
@@ -17,7 +17,9 @@ import Friends from "./Friends";
 import CreatePost from "../../components/createPost";
 import GridPosts from "./GridPosts";
 import Post from "../../components/post";
-export default function Profile({ setVisible }) {
+import CreatePostPopup from "../../components/createPostPopup";
+export default function Profile({ getAllPosts }) {
+  const [visible, setVisible] = useState(false);
   const { username } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => ({ ...state }));
@@ -106,7 +108,16 @@ export default function Profile({ setVisible }) {
   console.log(profile);
   return (
     <div className="profile">
-      <Header page="profile" />
+      {visible && (
+        <CreatePostPopup
+          user={user}
+          setVisible={setVisible}
+          posts={profile?.posts}
+          dispatch={dispatch}
+          profile
+        />
+      )}
+      <Header page="profile" getAllPosts={getAllPosts} />
       <div className="profile_top" ref={profileTop}>
         <div className="profile_container">
           <Cover

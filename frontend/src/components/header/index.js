@@ -1,5 +1,5 @@
-import './style.css';
-import { Link } from 'react-router-dom';
+import "./style.css";
+import { Link } from "react-router-dom";
 import {
   ArrowDown,
   Friends,
@@ -13,17 +13,17 @@ import {
   Notifications,
   Search,
   Watch,
-} from '../../svg';
-import { useSelector } from 'react-redux';
-import SearchMenu from './SearchMenu';
-import { useRef, useState } from 'react';
-import AllMenu from './AllMenu';
-import useClickOutside from '../../helpers/clickOutside';
-import UserMenu from './userMenu/UserMenu';
+} from "../../svg";
+import { useSelector } from "react-redux";
+import SearchMenu from "./SearchMenu";
+import { useRef, useState } from "react";
+import AllMenu from "./AllMenu";
+import useClickOutside from "../../helpers/clickOutside";
+import UserMenu from "./userMenu/UserMenu";
 
-export default function Header({ page }) {
+export default function Header({ page, getAllPosts }) {
   const { user } = useSelector((user) => ({ ...user }));
-  const color = '#65676b';
+  const color = "#65676b";
   const [showSearchMenu, setShowSearchMenu] = useState(false);
   const [showAllMenu, setShowAllMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -40,7 +40,7 @@ export default function Header({ page }) {
       <div className="header_left">
         <Link to="/" className="header_logo">
           <div className="circle">
-           <Logo/>
+            <Logo />
           </div>
         </Link>
         <div
@@ -63,9 +63,10 @@ export default function Header({ page }) {
       <div className="header_middle">
         <Link
           to="/"
-          className={`middle_icon ${page === 'home' ? 'active' : 'hover1'}`}
+          className={`middle_icon ${page === "home" ? "active" : "hover1"}`}
+          onClick={() => getAllPosts()}
         >
-          {page === 'home' ? <HomeActive /> : <Home color={color} />}
+          {page === "home" ? <HomeActive /> : <Home color={color} />}
         </Link>
         <Link to="/" className="middle_icon hover1">
           <Friends color={color} />
@@ -85,14 +86,14 @@ export default function Header({ page }) {
         <Link
           to="/profile"
           className={`profile_link hover1 ${
-            page === 'profile' ? 'active_link' : ''
+            page === "profile" ? "active_link" : ""
           }`}
         >
           <img src={user?.picture} alt="" />
           <span>{user?.first_name}</span>
         </Link>
         <div
-          className={`circle_icon hover1 ${showAllMenu && 'active_header'}`}
+          className={`circle_icon hover1 ${showAllMenu && "active_header"}`}
           ref={allmenu}
         >
           <div
@@ -100,14 +101,14 @@ export default function Header({ page }) {
               setShowAllMenu((prev) => !prev);
             }}
           >
-            <div style={{ transform: 'translateY(2px)' }}>
+            <div style={{ transform: "translateY(2px)" }}>
               <Menu />
             </div>
           </div>
 
           {showAllMenu && <AllMenu />}
         </div>
-        <Link to="/messenger"className="circle_icon hover1">
+        <Link to="/messenger" className="circle_icon hover1">
           <Messenger />
         </Link>
         <div className="circle_icon hover1">
@@ -115,7 +116,7 @@ export default function Header({ page }) {
           <div className="right_notification">5</div>
         </div>
         <div
-          className={`circle_icon hover1 ${showUserMenu && 'active_header'}`}
+          className={`circle_icon hover1 ${showUserMenu && "active_header"}`}
           ref={usermenu}
         >
           <div
@@ -123,7 +124,7 @@ export default function Header({ page }) {
               setShowUserMenu((prev) => !prev);
             }}
           >
-            <div style={{ transform: 'translateY(2px)' }}>
+            <div style={{ transform: "translateY(2px)" }}>
               <ArrowDown />
             </div>
           </div>

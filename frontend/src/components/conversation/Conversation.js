@@ -1,20 +1,22 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import './style.css';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import "./style.css";
 
 export default function Conversation({ conversation, currentUser }) {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
     const friendId = conversation.members.find((m) => m !== currentUser.id);
-    console.log(friendId + 'AAAAAAAA');
     const getUser = async () => {
       try {
-        const res=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/getUser/${friendId}`,{
-          headers: {
-            Authorization: `Bearer ${currentUser.token}`,
-          },
-        });
+        const res = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/getUser/${friendId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${currentUser.token}`,
+            },
+          }
+        );
         setUsers(res.data);
       } catch (error) {
         console.log(error);
@@ -22,14 +24,9 @@ export default function Conversation({ conversation, currentUser }) {
     };
     getUser();
   }, [currentUser, conversation]);
-  console.log(users, 'aaaaaaaaa');
   return (
     <div className="conversation">
-      <img
-        className="conversationImg"
-        src={users?.picture}
-        alt=""
-      />
+      <img className="conversationImg" src={users?.picture} alt="" />
       <span className="conversationName"> {users?.username} </span>
     </div>
   );

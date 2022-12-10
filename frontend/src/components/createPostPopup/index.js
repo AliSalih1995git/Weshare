@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import './style.css';
-import AddToYourPost from './AddToYourPost';
-import ImagePreview from './ImagePreview';
-import EmojiPickerBackground from './EmojiPickerBackground';
-import { useRef } from 'react';
-import useClickOutside from '../../helpers/clickOutside';
-import { createPost } from '../../functions/post';
-import PulseLoader from 'react-spinners/PulseLoader';
-import PostError from './PostError';
-import dataURItoBlob from '../../helpers/dataURItoBlob';
-import { uploadImages } from '../../functions/uploadImages';
-function CreatePostPopup({ user, setVisible }) {
+import { useState } from "react";
+import "./style.css";
+import AddToYourPost from "./AddToYourPost";
+import ImagePreview from "./ImagePreview";
+import EmojiPickerBackground from "./EmojiPickerBackground";
+import { useRef } from "react";
+import useClickOutside from "../../helpers/clickOutside";
+import { createPost } from "../../functions/post";
+import PulseLoader from "react-spinners/PulseLoader";
+import PostError from "./PostError";
+import dataURItoBlob from "../../helpers/dataURItoBlob";
+import { uploadImages } from "../../functions/uploadImages";
+function CreatePostPopup({ user, setVisible, posts, dispatch, profile }) {
   const popup = useRef(null);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [showPrev, setShowPrev] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [images, setImages] = useState([]);
-  const [background, setBackground] = useState('');
+  const [background, setBackground] = useState("");
   useClickOutside(popup, () => {
     setVisible(false);
   });
@@ -33,9 +33,13 @@ function CreatePostPopup({ user, setVisible }) {
         user.token
       );
       setLoading(false);
-      if (response === 'ok') {
-        setBackground('');
-        setText('');
+      if (response.status === "ok") {
+        dispatch({
+          type: profile ? "PROFILE_POSTS" : "POSTS_SUCCESS",
+          payload: [response.data, ...posts],
+        });
+        setBackground("");
+        setText("");
         setVisible(false);
       } else {
         setError(response);
@@ -50,9 +54,9 @@ function CreatePostPopup({ user, setVisible }) {
 
       const path = `${user.username}/post_images`;
       let formData = new FormData();
-      formData.append('path', path);
+      formData.append("path", path);
       postImages.forEach((image) => {
-        formData.append('file', image);
+        formData.append("file", image);
       });
       const response = await uploadImages(formData, path, user.token);
       console.log(response);
@@ -66,9 +70,13 @@ function CreatePostPopup({ user, setVisible }) {
         user.token
       );
       setLoading(false);
-      if (res === 'ok') {
-        setText('');
-        setImages('');
+      if (res.status === "ok") {
+        dispatch({
+          type: profile ? "PROFILE_POSTS" : "POSTS_SUCCESS",
+          payload: [response.data, ...posts],
+        });
+        setText("");
+        setImages("");
         setVisible(false);
       } else {
         setError(res);
@@ -84,15 +92,19 @@ function CreatePostPopup({ user, setVisible }) {
         user.token
       );
       setLoading(false);
-      if (response === 'ok') {
-        setBackground('');
-        setText('');
+      if (response.status === "ok") {
+        dispatch({
+          type: profile ? "PROFILE_POSTS" : "POSTS_SUCCESS",
+          payload: [response.data, ...posts],
+        });
+        setBackground("");
+        setText("");
         setVisible(false);
       } else {
         setError(response);
       }
     } else {
-      console.log('nothing');
+      console.log("nothing");
     }
   };
   return (
@@ -155,7 +167,7 @@ function CreatePostPopup({ user, setVisible }) {
           }}
           disabled={loading}
         >
-          {loading ? <PulseLoader color="#fff" size={5} /> : 'Post'}
+          {loading ? <PulseLoader color="#fff" size={5} /> : "Post"}
         </button>
       </div>
     </div>

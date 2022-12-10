@@ -1,6 +1,11 @@
 import './style.css';
+import { useState } from 'react';
 
-export default function ChatOnline() {
+
+export default function ChatOnline(onlineUsers,currentId,setCurrentChat) {
+  const [friends, setFriends] = useState([]);
+  const [onlineFriends, setOnlineFriends] = useState([]);
+  const [a,seta]=useState
   return (
     <div className="ChatOnline">
       <div className="chatOnlineFriend">
@@ -12,7 +17,7 @@ export default function ChatOnline() {
           />
           <div className="chatOnlineBadge"></div>
         </div>
-        <span className="chatOnlineName">Alisali</span>
+        <span className="chatOnlineName">Alisalihh</span>
       </div>
     </div>
   );

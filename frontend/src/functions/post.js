@@ -1,5 +1,5 @@
-import axios from 'axios';
-import instance from '../api/instance';
+import axios from "axios";
+import instance from "../api/instance";
 
 export const createPost = async (
   type,
@@ -25,18 +25,18 @@ export const createPost = async (
         },
       }
     );
-    return 'ok';
+    return { status: "ok", data };
   } catch (error) {
     return error.response.data.message;
   }
 };
 export const reactPost = async (postId, react, token) => {
   try {
-    const { data } = await instance.put('reactPost', {
+    const { data } = await instance.put("reactPost", {
       postId,
       react,
     });
-    return 'ok';
+    return "ok";
   } catch (error) {
     return error.response.data.message;
   }
@@ -67,6 +67,24 @@ export const comment = async (postId, comment, image, token) => {
       }
     );
     console.log(data);
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const savePost = async (postId, token) => {
+  try {
+    const { data } = await axios.put(
+      `${process.env.REACT_APP_BACKEND_URL}/savePost/${postId}`,
+      {},
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return data;
   } catch (error) {
     return error.response.data.message;

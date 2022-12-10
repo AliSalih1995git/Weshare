@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import Picker from 'emoji-picker-react';
-import {useMediaQuery} from 'react-responsive';
+import { useEffect, useRef, useState } from "react";
+import Picker from "emoji-picker-react";
+import { useMediaQuery } from "react-responsive";
 
 export default function EmojiPickerBackground({
   text,
@@ -30,55 +30,55 @@ export default function EmojiPickerBackground({
   };
 
   const postBackgrounds = [
-    '../../../images/postbackgrounds/1.jpg',
-    '../../../images/postbackgrounds/2.jpg',
-    '../../../images/postbackgrounds/3.jpg',
-    '../../../images/postbackgrounds/4.jpg',
-    '../../../images/postbackgrounds/5.jpg',
-    '../../../images/postbackgrounds/6.jpg',
-    '../../../images/postbackgrounds/7.jpg',
-    '../../../images/postbackgrounds/8.jpg',
-    '../../../images/postbackgrounds/9.jpg',
+    "../../../images/postBackgrounds/1.jpg",
+    "../../../images/postBackgrounds/2.jpg",
+    "../../../images/postBackgrounds/3.jpg",
+    "../../../images/postBackgrounds/4.jpg",
+    "../../../images/postBackgrounds/5.jpg",
+    "../../../images/postBackgrounds/6.jpg",
+    "../../../images/postBackgrounds/7.jpg",
+    "../../../images/postBackgrounds/8.jpg",
+    "../../../images/postBackgrounds/9.jpg",
   ];
   const backgrountHandler = (i) => {
     bgRef.current.style.backgroundImage = `url(${postBackgrounds[i]})`;
     setBackground(postBackgrounds[i]);
-    bgRef.current.classList.add('bgHandler');
+    bgRef.current.classList.add("bgHandler");
   };
   const removeBackground = (i) => {
-    bgRef.current.style.backgroundImage = '';
-    setBackground('');
-    bgRef.current.classList.remove('bgHandler');
+    bgRef.current.style.backgroundImage = "";
+    setBackground("");
+    bgRef.current.classList.remove("bgHandler");
   };
   const sm = useMediaQuery({
-    query: '(max-width:550px)',
+    query: "(max-width:550px)",
   });
   return (
-    <div className={type2 ? 'images_input' : ''}>
-      <div className={!type2 ? 'flex_center' : ''} ref={bgRef}>
+    <div className={type2 ? "images_input" : ""}>
+      <div className={!type2 ? "flex_center" : ""} ref={bgRef}>
         <textarea
           ref={textRef}
           maxLength="250"
           value={text}
           placeholder={`What's on your mind, ${user.first_name}`}
-          className={`post_input ${type2 ? 'input2' : ''} ${
-            sm && !background && '10'
+          className={`post_input ${type2 ? "input2" : ""} ${
+            sm && !background && "10"
           }`}
           onChange={(e) => setText(e.target.value)}
           style={{
             paddingTop: `${
               background
                 ? Math.abs(textRef.current.value.length * 0.1 - 32)
-                : '0'
+                : "0"
             }%`,
           }}
         ></textarea>
       </div>
-      <div className={!type2 ? 'post_emojis_wrap' : ''}>
+      <div className={!type2 ? "post_emojis_wrap" : ""}>
         {picker && (
           <div
             className={`comment_emoji_picker ${
-              type2 ? 'movepicker2' : 'remove'
+              type2 ? "movepicker2" : "remove"
             }`}
           >
             <Picker onEmojiClick={handleEmoji} />
@@ -114,7 +114,7 @@ export default function EmojiPickerBackground({
           </div>
         )}
         <i
-          className={`emoji_icon_large ${type2 ? 'moveleft' : ''}`}
+          className={`emoji_icon_large ${type2 ? "moveleft" : ""}`}
           onClick={() => {
             setPicker((prev) => !prev);
           }}

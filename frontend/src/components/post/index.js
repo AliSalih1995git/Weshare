@@ -1,13 +1,13 @@
-import { Link } from 'react-router-dom';
-import './style.css';
-import Moment from 'react-moment';
-import { Dots, Public } from '../../svg';
-import ReactsPopup from './ReactsPopup';
-import { useEffect, useState } from 'react';
-import CreateComment from './CreateComment';
-import PostMenu from './PostMenu';
-import Comment from './Comment';
-import { getReacts, reactPost } from '../../functions/post';
+import { Link } from "react-router-dom";
+import "./style.css";
+import Moment from "react-moment";
+import { Dots, Public } from "../../svg";
+import ReactsPopup from "./ReactsPopup";
+import { useEffect, useState } from "react";
+import CreateComment from "./CreateComment";
+import PostMenu from "./PostMenu";
+import Comment from "./Comment";
+import { getReacts, reactPost } from "../../functions/post";
 export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -15,6 +15,8 @@ export default function Post({ post, user, profile }) {
   const [check, setCheck] = useState();
   const [total, setTotal] = useState(0);
   const [count, setCount] = useState(1);
+  const [checkSaved, setCheckSaved] = useState(1);
+
   const [comments, setComments] = useState([]);
   useEffect(() => {
     getPostReacts();
@@ -23,7 +25,8 @@ export default function Post({ post, user, profile }) {
     const res = await getReacts(post._id, user.token);
     setReacts(res.reacts);
     setCheck(res.check);
-    setTotal(res.total)
+    setTotal(res.total);
+    setCheckSaved(res.checkSaved);
   };
   const reactHandler = async (type) => {
     reactPost(post._id, type, user.token);
@@ -57,7 +60,7 @@ export default function Post({ post, user, profile }) {
     setCount((prev) => prev + 3);
   };
   return (
-    <div className="post" style={{ width: `${profile && '100%'}` }}>
+    <div className="post" style={{ width: `${profile && "100%"}` }}>
       <div className="post_header">
         <Link
           to={`/profile/${post.user.username}`}
@@ -68,13 +71,13 @@ export default function Post({ post, user, profile }) {
             <div className="post_profile_name">
               {post.user.first_name} {post.user.last_name}
               <div className="updated_p">
-                {post.type === 'profilePicture' &&
+                {post.type === "profilePicture" &&
                   `updated ${
-                    post.user.gender === 'male' ? 'his' : 'her'
+                    post.user.gender === "male" ? "his" : "her"
                   } profile picture`}
-                {post.type === 'coverPicture' &&
+                {post.type === "coverPicture" &&
                   `updated ${
-                    post.user.gender === 'male' ? 'his' : 'her'
+                    post.user.gender === "male" ? "his" : "her"
                   } cover picture`}
               </div>
             </div>
@@ -107,14 +110,14 @@ export default function Post({ post, user, profile }) {
             <div
               className={
                 post.images.length === 1
-                  ? 'grid_1'
+                  ? "grid_1"
                   : post.images.length === 2
-                  ? 'grid_2'
+                  ? "grid_2"
                   : post.images.length === 3
-                  ? 'grid_3'
+                  ? "grid_3"
                   : post.images.length === 4
-                  ? 'grid_4'
-                  : post.images.length >= 5 && 'grid_5'
+                  ? "grid_4"
+                  : post.images.length >= 5 && "grid_5"
               }
             >
               {post.images.slice(0, 5).map((image, i) => (
@@ -128,7 +131,7 @@ export default function Post({ post, user, profile }) {
             </div>
           )}
         </>
-      ) : post.type === 'profilePicture' ? (
+      ) : post.type === "profilePicture" ? (
         <div className="post_profile_wrap">
           <div className="post_updated_bg">
             <img src={post.user.cover} alt="" />
@@ -148,9 +151,10 @@ export default function Post({ post, user, profile }) {
         <div className="reacts_count">
           <div className="reacts_count_imgs">
             {reacts &&
-              reacts.sort((a, b) => {
-                return b.count - a.count;
-              })
+              reacts
+                .sort((a, b) => {
+                  return b.count - a.count;
+                })
                 .slice(0, 3)
                 .map(
                   (react) =>
@@ -159,7 +163,7 @@ export default function Post({ post, user, profile }) {
                     )
                 )}
           </div>
-          <div className="reacts_count_num">{total>0 && total}</div>
+          <div className="reacts_count_num">{total > 0 && total}</div>
         </div>
         <div className="to_right">
           <div className="comments_count">{comments.length} comments</div>
@@ -185,14 +189,14 @@ export default function Post({ post, user, profile }) {
               setVisible(false);
             }, 500);
           }}
-          onClick={() => reactHandler(check ? check : 'like')}
+          onClick={() => reactHandler(check ? check : "like")}
         >
           {check ? (
             <img
               src={`../../../reacts/${check}.svg`}
               alt=""
               className="small_react"
-              style={{ width: '20px' }}
+              style={{ width: "20px" }}
             />
           ) : (
             <i className="like_icon"></i>
@@ -202,24 +206,24 @@ export default function Post({ post, user, profile }) {
               color: `
           
           ${
-            check === 'like'
-              ? '#4267b2'
-              : check === 'love'
-              ? '#f63459'
-              : check === 'haha'
-              ? '#f7b125'
-              : check === 'sad'
-              ? '#f7b125'
-              : check === 'wow'
-              ? '#f7b125'
-              : check === 'angry'
-              ? '#e4605a'
-              : ''
+            check === "like"
+              ? "#4267b2"
+              : check === "love"
+              ? "#f63459"
+              : check === "haha"
+              ? "#f7b125"
+              : check === "sad"
+              ? "#f7b125"
+              : check === "wow"
+              ? "#f7b125"
+              : check === "angry"
+              ? "#e4605a"
+              : ""
           }
           `,
             }}
           >
-            {check ? check : 'Like'}
+            {check ? check : "Like"}
           </span>
         </div>
         <div className="post_action hover1">
@@ -243,8 +247,8 @@ export default function Post({ post, user, profile }) {
             .map((comment, i) => <Comment comment={comment} key={i} />)}
         {count < comments.length && (
           <div className="view_comments" onClick={() => showMore()}>
-            {' '}
-            View more Comments{' '}
+            {" "}
+            View more Comments{" "}
           </div>
         )}
       </div>
@@ -254,6 +258,11 @@ export default function Post({ post, user, profile }) {
           postUserId={post.user._id}
           imagesLength={post?.images?.length}
           setShowMenu={setShowMenu}
+          postId={post._id}
+          token={user.token}
+          checkSaved={checkSaved}
+          setCheckSaved={setCheckSaved}
+          images={post.images}
         />
       )}
     </div>
