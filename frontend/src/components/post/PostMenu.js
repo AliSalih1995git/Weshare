@@ -86,21 +86,21 @@ export default function PostMenu({
       )}
       {test && <MenuItem icon="archive_icon" title="Move to archive" />}
       {test && (
-        <MenuItem
-          icon="trash_icon"
-          title="Move to trash"
-          subtitle="items in your trash are deleted after 30 days"
-        />
+        <div onClick={() => deleteHandler()}>
+          <MenuItem
+            icon="trash_icon"
+            title="Move to trash"
+            subtitle="items in your trash are deleted after 30 days"
+          />
+        </div>
       )}
       {!test && <div className="line"></div>}
       {!test && (
-        <div onClick={() => deleteHandler()}>
-          <MenuItem
-            img="../../../icons/report.png"
-            title="Report post"
-            subtitle="i'm concerned about this post"
-          />
-        </div>
+        <MenuItem
+          img="../../../icons/report.png"
+          title="Report post"
+          subtitle="i'm concerned about this post"
+        />
       )}
     </ul>
   );
