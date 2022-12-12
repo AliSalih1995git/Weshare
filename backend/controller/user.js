@@ -187,15 +187,11 @@ exports.findUser = async (req, res) => {
   }
 };
 exports.getUser = async (req, res) => {
+  const userId = req.params.id;
   try {
-    const { id } = req.params;
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(400).json({
-        message: "Account does not exists.",
-      });
-    }
-    return res.status(200).json(user);
+    const user = await User.findOne({ _id: userId });
+    const { password, updatedAt, ...other } = user._doc;
+    res.status(200).json(other);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -349,6 +345,25 @@ exports.addFriend = async (req, res) => {
         .status(400)
         .json({ message: "You can't send a request to yourself" });
     }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getFriend = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    const friends = await Promise.all(
+      user.followings.map((friendId) => {
+        return User.findById(friendId);
+      })
+    );
+    let friendList = [];
+    friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+      friendList.push({ _id, username, profilePicture });
+    });
+    res.status(200).json(friendList);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

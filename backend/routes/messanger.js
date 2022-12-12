@@ -1,14 +1,23 @@
-const express = require('express');
-const { conversation,getConversation ,messagePost,messageGet,getFirstSecondConversation} = require('../controller/messanger');
-const { authUser } = require('../middlwares/auth');
+const express = require("express");
+const {
+  newConversation,
+  getConversation,
+  addMessage,
+  messageGet,
+  getFirstSecondConversation,
+} = require("../controller/messanger");
+const { authUser } = require("../middlwares/auth");
 const router = express.Router();
 
-router.post('/conversation', conversation);
-router.get('/conversation/:userId', getConversation);
-router.get('/conversation/find/:firstUserId/:secondUserId', getFirstSecondConversation);
+router.post("/newConversation", authUser, newConversation);
+router.get("/getConversation/:userId", authUser, getConversation);
+router.get(
+  "/getFirstSecondConversation/find/:firstUserId/:secondUserId",
+  authUser,
+  getFirstSecondConversation
+);
 
-router.post('/messagePost', messagePost);
-router.get('/messageGet/:conversationId', messageGet); 
-
+router.post("/addMessage", authUser, addMessage);
+router.get("/messageGet/:conversationId", authUser, messageGet);
 
 module.exports = router;
