@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { Dots } from '../../svg';
+import { Link } from "react-router-dom";
+import { Dots } from "../../assets/svg";
 
 export default function ProfileMenu() {
   return (

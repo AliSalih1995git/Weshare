@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import Picker from 'emoji-picker-react';
-import dataURItoBlob from '../../helpers/dataURItoBlob';
-import { uploadImages } from '../../functions/uploadImages';
-import { ClipLoader } from 'react-spinners';
-import { comment } from '../../functions/post';
+import { useEffect, useRef, useState } from "react";
+import Picker from "emoji-picker-react";
+import dataURItoBlob from "../../helpers/dataURItoBlob";
+import { uploadImages } from "../../api/functions/uploadImages";
+import { ClipLoader } from "react-spinners";
+import { comment } from "../../api/functions/post";
 
 export default function CreateComment({ user, postId, setCount }) {
   const [picker, setPicker] = useState(false);
-  const [text, setText] = useState('');
-  const [error, setError] = useState('');
-  const [commentImage, setCommentImage] = useState('');
+  const [text, setText] = useState("");
+  const [error, setError] = useState("");
+  const [commentImage, setCommentImage] = useState("");
   const [cursorPosition, setCursorPosition] = useState();
   const [loading, setLoading] = useState(false);
   const textRef = useRef(null);
@@ -29,10 +29,10 @@ export default function CreateComment({ user, postId, setCount }) {
   const handleImage = (e) => {
     let file = e.target.files[0];
     if (
-      file.type !== 'image/jpeg' &&
-      file.type !== 'image/png' &&
-      file.type !== 'image/webp' &&
-      file.type !== 'image/gif'
+      file.type !== "image/jpeg" &&
+      file.type !== "image/png" &&
+      file.type !== "image/webp" &&
+      file.type !== "image/gif"
     ) {
       setError(`${file.name} format is not supported.`);
       return;
@@ -48,14 +48,14 @@ export default function CreateComment({ user, postId, setCount }) {
     };
   };
   const handleComment = async (e) => {
-    if (e.key === 'Enter') {
-      if (commentImage !== '') {
+    if (e.key === "Enter") {
+      if (commentImage !== "") {
         setLoading(true);
         const img = dataURItoBlob(commentImage);
         const path = `${user.username}/post_images/${postId}`;
         let formData = new FormData();
-        formData.append('path', path);
-        formData.append('file', img);
+        formData.append("path", path);
+        formData.append("file", img);
         const imgComment = await uploadImages(formData, path, user.token);
 
         const comments = await comment(
@@ -67,17 +67,17 @@ export default function CreateComment({ user, postId, setCount }) {
         console.log(comments);
         setCount((prev) => ++prev);
         setLoading(false);
-        setText('');
-        setCommentImage('');
+        setText("");
+        setCommentImage("");
       } else {
         setLoading(true);
 
-        const comments = await comment(postId, text, '', user.token);
+        const comments = await comment(postId, text, "", user.token);
         console.log(comments);
         setCount((prev) => ++prev);
         setLoading(false);
-        setText('');
-        setCommentImage('');
+        setText("");
+        setCommentImage("");
       }
     }
   };
@@ -101,7 +101,7 @@ export default function CreateComment({ user, postId, setCount }) {
           {error && (
             <div className="postError comment_error">
               <div className="postError_error">{error}</div>
-              <button className="blue_btn" onClick={() => setError('')}>
+              <button className="blue_btn" onClick={() => setError("")}>
                 Try again
               </button>
             </div>
@@ -114,7 +114,7 @@ export default function CreateComment({ user, postId, setCount }) {
             onChange={(e) => setText(e.target.value)}
             onKeyUp={handleComment}
           />
-          <div className="comment_circle" style={{ marginTop: '5px' }}>
+          <div className="comment_circle" style={{ marginTop: "5px" }}>
             <ClipLoader size={20} color="#1078f2" loading={loading} />
           </div>
           <div
@@ -139,12 +139,12 @@ export default function CreateComment({ user, postId, setCount }) {
           </div>
         </div>
       </div>
-       {commentImage && (
+      {commentImage && (
         <div className="comment_img_preview">
           <img src={commentImage} alt="" />
           <div
             className="small_white_circle"
-            onClick={() => setCommentImage('')}
+            onClick={() => setCommentImage("")}
           >
             <i className="exit_icon"></i>
           </div>

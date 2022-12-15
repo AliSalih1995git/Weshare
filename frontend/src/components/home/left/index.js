@@ -1,8 +1,8 @@
 import LeftLink from "./LeftLink";
 import "./style.css";
-import { left } from "../../../data/home";
+import { left } from "../../../api/data/home";
 import { Link } from "react-router-dom";
-import { ArrowDown1 } from "../../../svg";
+import { ArrowDown1 } from "../../../assets/svg";
 import { useState } from "react";
 import Shortcut from "./Shortcut";
 
@@ -26,9 +26,8 @@ export default function LeftHome({ user }) {
         />
       ))}
       <Link to="/messenger" className="left_link hover1">
-        <img src='../left/messenger.png' alt="" />
+        <img src="../left/messenger.png" alt="" />
         <span>Messanger</span>
-        
       </Link>
       {!visible && (
         <div
@@ -73,11 +72,10 @@ export default function LeftHome({ user }) {
       </div>
       <div className="shortcut_list">
         <Shortcut />
-
       </div>
-      <div className={`fb_copyright ${visible && "relative_fb_copyright"}`}>
-
-      </div>
+      <div
+        className={`fb_copyright ${visible && "relative_fb_copyright"}`}
+      ></div>
     </div>
   );
 }

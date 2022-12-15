@@ -1,7 +1,6 @@
 const express = require("express");
-const { authUser } = require('../middlwares/auth');
-const {reactPost,getReacts } = require('../controller/react');
-
+const { authUser } = require("../middlwares/auth");
+const { reactPost, getReacts } = require("../controller/react");
 
 const router = express.Router();
 router.put("/reactPost", authUser, reactPost);

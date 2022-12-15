@@ -1,24 +1,24 @@
-import { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { photosReducer } from '../../functions/reducer';
-import useClickOutside from '../../helpers/clickOutside';
-import './style.css';
-import UpdateProfilePicture from './UpdateProfilePicture';
+import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { photosReducer } from "../../api/functions/reducer";
+import useClickOutside from "../../helpers/clickOutside";
+import "./style.css";
+import UpdateProfilePicture from "./UpdateProfilePicture";
 
 export default function ProfilePicture({ setShow, pRef, photos }) {
   const popup = useRef(null);
   const { user } = useSelector((state) => ({ ...state }));
   // useClickOutside(popup, () => setShow(false));
   const refInput = useRef(null);
-  const [image, setImage] = useState('');
-  const [error, setError] = useState('');
+  const [image, setImage] = useState("");
+  const [error, setError] = useState("");
   const handleImage = (e) => {
     let file = e.target.files[0];
     if (
-      file.type !== 'image/jpeg' &&
-      file.type !== 'image/png' &&
-      file.type !== 'image/webp' &&
-      file.type !== 'image/gif'
+      file.type !== "image/jpeg" &&
+      file.type !== "image/png" &&
+      file.type !== "image/webp" &&
+      file.type !== "image/gif"
     ) {
       setError(`${file.name} format is not supported.`);
       return;
@@ -67,7 +67,7 @@ export default function ProfilePicture({ setShow, pRef, photos }) {
         {error && (
           <div className="postError comment_error">
             <div className="postError_error">{error}</div>
-            <button className="blue_btn" onClick={() => setError('')}>
+            <button className="blue_btn" onClick={() => setError("")}>
               Try again
             </button>
           </div>

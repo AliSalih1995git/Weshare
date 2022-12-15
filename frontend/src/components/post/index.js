@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import "./style.css";
 import Moment from "react-moment";
-import { Dots, Public } from "../../svg";
-import ReactsPopup from "./ReactsPopup";
 import { useEffect, useRef, useState } from "react";
+import { Dots, Public } from "../../assets/svg";
+import { getReacts, reactPost } from "../../api/functions/post";
+import ReactsPopup from "./ReactsPopup";
 import CreateComment from "./CreateComment";
-import PostMenu from "./PostMenu";
 import Comment from "./Comment";
-import { getReacts, reactPost } from "../../functions/post";
+import PostMenu from "./PostMenu";
 export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -15,12 +15,15 @@ export default function Post({ post, user, profile }) {
   const [check, setCheck] = useState();
   const [total, setTotal] = useState(0);
   const [count, setCount] = useState(1);
-  const [checkSaved, setCheckSaved] = useState(1);
-
+  const [checkSaved, setCheckSaved] = useState();
   const [comments, setComments] = useState([]);
   useEffect(() => {
     getPostReacts();
   }, [post]);
+  useEffect(() => {
+    setComments(post?.comments);
+  }, [post]);
+
   const getPostReacts = async () => {
     const res = await getReacts(post._id, user.token);
     setReacts(res.reacts);
@@ -28,6 +31,7 @@ export default function Post({ post, user, profile }) {
     setTotal(res.total);
     setCheckSaved(res.checkSaved);
   };
+
   const reactHandler = async (type) => {
     reactPost(post._id, type, user.token);
     if (check === type) {
@@ -53,13 +57,11 @@ export default function Post({ post, user, profile }) {
       }
     }
   };
-  useEffect(() => {
-    setComments(post?.comments);
-  }, [post]);
   const showMore = () => {
     setCount((prev) => prev + 3);
   };
   const postRef = useRef(null);
+
   return (
     <div
       className="post"
@@ -152,6 +154,7 @@ export default function Post({ post, user, profile }) {
           <img src={post.images[0].url} alt="" />
         </div>
       )}
+
       <div className="post_infos">
         <div className="reacts_count">
           <div className="reacts_count_imgs">
@@ -183,7 +186,6 @@ export default function Post({ post, user, profile }) {
         <ReactsPopup
           visible={visible}
           setVisible={setVisible}
-          postId={post._id}
           reactHandler={reactHandler}
         />
         <div
@@ -205,7 +207,7 @@ export default function Post({ post, user, profile }) {
               src={`../../../reacts/${check}.svg`}
               alt=""
               className="small_react"
-              style={{ width: "20px" }}
+              style={{ width: "18px" }}
             />
           ) : (
             <i className="like_icon"></i>
@@ -246,7 +248,12 @@ export default function Post({ post, user, profile }) {
       </div>
       <div className="comments_wrap">
         <div className="comments_order"></div>
-        <CreateComment user={user} postId={post._id} setCount={setCount} />
+        <CreateComment
+          user={user}
+          postId={post._id}
+          setComments={setComments}
+          setCount={setCount}
+        />
         {comments &&
           comments
             .sort((a, b) => {
@@ -256,8 +263,7 @@ export default function Post({ post, user, profile }) {
             .map((comment, i) => <Comment comment={comment} key={i} />)}
         {count < comments.length && (
           <div className="view_comments" onClick={() => showMore()}>
-            {" "}
-            View more Comments{" "}
+            View more comments
           </div>
         )}
       </div>

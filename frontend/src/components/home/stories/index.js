@@ -1,21 +1,21 @@
-import { ArrowRight, Plus } from '../../../svg';
-import './style.css';
-import { stories } from '../../../data/home';
-import Story from './Story';
-import { useMediaQuery } from 'react-responsive';
+import { ArrowRight, Plus } from "../../../assets/svg";
+import "./style.css";
+import { stories } from "../../../api/data/home";
+import Story from "./Story";
+import { useMediaQuery } from "react-responsive";
 
 export default function Stories() {
   const query1175px = useMediaQuery({
-    query: '(max-width:1175px)',
+    query: "(max-width:1175px)",
   });
   const query1030px = useMediaQuery({
-    query: '(max-width:1030px)',
+    query: "(max-width:1030px)",
   });
   const query960px = useMediaQuery({
-    query: '(max-width:960px)',
+    query: "(max-width:960px)",
   });
   const query885px = useMediaQuery({
-    query: '(max-width:885px)',
+    query: "(max-width:885px)",
   });
   const max = query885px
     ? 5

@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { postsReducer } from "./api/functions/reducer";
 import Login from "./pages/login";
 import Profile from "./pages/profile";
 import Home from "./pages/home";
@@ -9,7 +10,6 @@ import Activate from "./pages/home/activate";
 import Reset from "./pages/reset";
 import CreatePostPopup from "./components/createPostPopup";
 import { useEffect, useReducer, useState } from "react";
-import { postsReducer } from "./functions/reducer";
 import axios from "axios";
 import Messanger from "./pages/messenger/Messanger";
 
@@ -21,9 +21,6 @@ function App() {
     posts: [],
     error: "",
   });
-  useEffect(() => {
-    getAllPosts();
-  }, [user]);
   const getAllPosts = async () => {
     try {
       dispatch({
@@ -48,6 +45,9 @@ function App() {
       });
     }
   };
+  useEffect(() => {
+    getAllPosts();
+  }, [user]);
 
   return (
     <>

@@ -7,7 +7,7 @@ import Header from "../../components/header";
 
 import Cover from "./Cover";
 import { useMediaQuery } from "react-responsive";
-import { profileReducer } from "../../functions/reducer";
+import { profileReducer } from "../../api/functions/reducer";
 import ProfilePictureInfos from "./ProfilePictureInfos";
 import ProfileMenu from "./ProfileMenu";
 import PplYouMayKnow from "./PplYouMayKnow";

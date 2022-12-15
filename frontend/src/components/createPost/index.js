@@ -1,5 +1,5 @@
-import { Feeling, LiveVideo, Photo } from '../../svg';
-import './style.css';
+import { Feeling, LiveVideo, Photo } from "../../assets/svg";
+import "./style.css";
 
 function CreatePost({ user, setVisible, profile }) {
   return (
@@ -12,7 +12,7 @@ function CreatePost({ user, setVisible, profile }) {
             setVisible(true);
           }}
         >
-          What's on your mind,{user?.first_name}{' '}
+          What's on your mind,{user?.first_name}{" "}
         </div>
       </div>
       <div className="create_splitter"></div>

@@ -5,9 +5,9 @@ import {
   getSearchHistory,
   removeFromSearch,
   search,
-} from "../../functions/user";
+} from "../../api/functions/user";
 import useClickOutside from "../../helpers/clickOutside";
-import { Return, Search } from "../../svg";
+import { Return, Search } from "../../assets/svg";
 
 function SearchMenu({ color, setShowSearchMenu, token }) {
   const [iconVisible, setIconVisible] = useState(true);

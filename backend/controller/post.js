@@ -15,6 +15,7 @@ exports.getAllPosts = async (req, res) => {
   try {
     const followingTemp = await User.findById(req.user.id).select("following");
     const following = followingTemp.following;
+    console.log(following, "followingPosts");
     const promises = following.map((user) => {
       return Post.find({ user: user })
         .populate("user", "first_name last_name picture username cover")
@@ -32,6 +33,7 @@ exports.getAllPosts = async (req, res) => {
     followingPosts.sort((a, b) => {
       return b.createdAt - a.createdAt;
     });
+
     res.json(followingPosts);
   } catch (error) {
     return res.status(500).json({ message: error.message });

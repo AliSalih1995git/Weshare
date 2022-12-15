@@ -1,5 +1,5 @@
-import { menu, create } from '../../data/allMenu';
-import AllMenuItems from './AllMenuItems';
+import { menu, create } from "../../api/data/allMenu";
+import AllMenuItems from "./AllMenuItems";
 export default function AllMenu() {
   return (
     <div className="all_menu">

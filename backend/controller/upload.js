@@ -1,5 +1,5 @@
-const cloudinary = require('cloudinary');
-const fs = require('fs');
+const cloudinary = require("cloudinary");
+const fs = require("fs");
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
@@ -26,7 +26,7 @@ exports.listImages = async (req, res) => {
 
   cloudinary.v2.search
     .expression(`${path}`)
-    .sort_by('created_at', `${sort}`)
+    .sort_by("created_at", `${sort}`)
     .max_results(max)
     .execute()
     .then((result) => {
@@ -47,7 +47,7 @@ const uploadToCloudinary = async (file, path) => {
       (err, res) => {
         if (err) {
           removeTmp(file.tempFilePath);
-          return res.status(400).json({ message: 'Upload image failed.' });
+          return res.status(400).json({ message: "Upload image failed." });
         }
         resolve({
           url: res.secure_url,

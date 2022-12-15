@@ -1,12 +1,12 @@
-import { useCallback, useRef, useState } from 'react';
-import Cropper from 'react-easy-crop';
-import getCroppedImg from '../../helpers/getCroppedImg';
-import { useDispatch, useSelector } from 'react-redux';
-import { uploadImages } from '../../functions/uploadImages';
-import { updateprofilePicture } from '../../functions/user';
-import { createPost } from '../../functions/post';
-import PulseLoader from 'react-spinners/PulseLoader';
-import Cookies from 'js-cookie';
+import { useCallback, useRef, useState } from "react";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../../helpers/getCroppedImg";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadImages } from "../../api/functions/uploadImages";
+import { updateprofilePicture } from "../../api/functions/user";
+import { createPost } from "../../api/functions/post";
+import PulseLoader from "react-spinners/PulseLoader";
+import Cookies from "js-cookie";
 
 export default function UpdateProfilePicture({
   setImage,
@@ -16,7 +16,7 @@ export default function UpdateProfilePicture({
   pRef,
 }) {
   const dispatch = useDispatch();
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -59,35 +59,35 @@ export default function UpdateProfilePicture({
       let blob = await fetch(img).then((b) => b.blob());
       const path = `${user.username}/profile_picture`;
       let formData = new FormData();
-      formData.append('file', blob);
-      formData.append('path', path);
+      formData.append("file", blob);
+      formData.append("path", path);
       const res = await uploadImages(formData, path, user.token);
       const updated_picture = await updateprofilePicture(
         res[0].url,
         user.token
       );
-      if (updated_picture === 'ok') {
+      if (updated_picture === "ok") {
         const new_post = await createPost(
-          'profilePicture',
+          "profilePicture",
           null,
           description,
           res,
           user.id,
           user.token
         );
-        if (new_post === 'ok') {
+        if (new_post === "ok") {
           setLoading(false);
-          setImage('');
+          setImage("");
           pRef.current.style.backgroundImage = `url(${res[0].url})`;
           Cookies.set(
-            'user',
+            "user",
             JSON.stringify({
               ...user,
               picture: res[0].url,
             })
           );
           dispatch({
-            type: 'UPDATEPICTURE',
+            type: "UPDATEPICTURE",
             payload: res[0].url,
           });
           setShow(false);
@@ -107,7 +107,7 @@ export default function UpdateProfilePicture({
   return (
     <div className="postBox update_img">
       <div className="box_header">
-        <div className="small_circle" onClick={() => setImage('')}>
+        <div className="small_circle" onClick={() => setImage("")}>
           <i className="exit_icon"></i>
         </div>
         <span>Update profile picture</span>
@@ -164,7 +164,7 @@ export default function UpdateProfilePicture({
         Your profile picture is public
       </div>
       <div className="update_submit_wrap">
-        <div className="blue_link" onClick={() => setImage('')}>
+        <div className="blue_link" onClick={() => setImage("")}>
           Cancel
         </div>
         <botton
@@ -172,7 +172,7 @@ export default function UpdateProfilePicture({
           disable={loading}
           onClick={() => updateProfilePicture()}
         >
-          {loading ? <PulseLoader color="#fff" size={5} /> : 'Save'}
+          {loading ? <PulseLoader color="#fff" size={5} /> : "Save"}
         </botton>
       </div>
     </div>

@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./style.css";
+import PulseLoader from "react-spinners/PulseLoader";
 import AddToYourPost from "./AddToYourPost";
 import ImagePreview from "./ImagePreview";
 import EmojiPickerBackground from "./EmojiPickerBackground";
-import { useRef } from "react";
 import useClickOutside from "../../helpers/clickOutside";
-import { createPost } from "../../functions/post";
-import PulseLoader from "react-spinners/PulseLoader";
+import { createPost } from "../../api/functions/post";
 import PostError from "./PostError";
 import dataURItoBlob from "../../helpers/dataURItoBlob";
-import { uploadImages } from "../../functions/uploadImages";
+import { uploadImages } from "../../api/functions/uploadImages";
+
 function CreatePostPopup({ user, setVisible, posts, dispatch, profile }) {
   const popup = useRef(null);
   const [text, setText] = useState("");

@@ -2,14 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
 import useClickOutside from "../../helpers/clickOutside";
 import getCroppedImg from "../../helpers/getCroppedImg";
-import { uploadImages } from "../../functions/uploadImages";
+import { uploadImages } from "../../api/functions/uploadImages";
 import { useSelector } from "react-redux";
-import { updateCover } from "../../functions/user";
-import { createPost } from "../../functions/post";
+import { updateCover } from "../../api/functions/user";
+import { createPost } from "../../api/functions/post";
 import PulseLoader from "react-spinners/PulseLoader";
 import OldCovers from "./OldCovers";
 
-export default function Cover({ cover, visitor,photos }) {
+export default function Cover({ cover, visitor, photos }) {
   const [showCoverMneu, setShowCoverMenu] = useState(false);
   const [coverPicture, setCoverPicture] = useState("");
   const [loading, setLoading] = useState(false);
@@ -178,7 +178,10 @@ export default function Cover({ cover, visitor,photos }) {
           </div>
           {showCoverMneu && (
             <div className="open_cover_menu" ref={menuRef}>
-              <div className="open_cover_menu_item hover1" onClick={()=>setShow(true)} >
+              <div
+                className="open_cover_menu_item hover1"
+                onClick={() => setShow(true)}
+              >
                 <i className="photo_icon"></i>
                 Select Photo
               </div>
@@ -193,7 +196,13 @@ export default function Cover({ cover, visitor,photos }) {
           )}
         </div>
       )}
-      {show&& <OldCovers photos={photos} setCoverPicture={setCoverPicture} setShow={setShow} /> }
+      {show && (
+        <OldCovers
+          photos={photos}
+          setCoverPicture={setCoverPicture}
+          setShow={setShow}
+        />
+      )}
     </div>
   );
 }

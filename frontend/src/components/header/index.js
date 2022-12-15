@@ -13,7 +13,7 @@ import {
   Notifications,
   Search,
   Watch,
-} from "../../svg";
+} from "../../assets/svg";
 import { useSelector } from "react-redux";
 import SearchMenu from "./SearchMenu";
 import { useRef, useState } from "react";

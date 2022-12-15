@@ -1,6 +1,6 @@
-import { stories } from '../../data/home';
-import { Dots } from '../../svg';
-import AddFriendSmallCard from './AddFriendSmallCard';
+import { stories } from "../../api/data/home";
+import { Dots } from "../../assets/svg";
+import AddFriendSmallCard from "./AddFriendSmallCard";
 export default function PplYouMayKnow() {
   return (
     <div className="pplumayknow">

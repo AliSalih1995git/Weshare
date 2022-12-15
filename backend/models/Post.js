@@ -16,7 +16,7 @@ const postSchema = new mongoose.Schema(
       type: Array,
     },
     user: {
-      type: ObjectId, 
+      type: ObjectId,
       ref: "User",
       required: true,
     },
@@ -37,7 +37,7 @@ const postSchema = new mongoose.Schema(
         },
         commentAt: {
           type: Date,
-          required:true,
+          required: true,
         },
       },
     ],

@@ -121,7 +121,7 @@ export default function Messanger() {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
+  console.log(conversations, "conversations");
   return (
     <>
       <Header />

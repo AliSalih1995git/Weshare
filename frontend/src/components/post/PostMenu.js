@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import MenuItem from "./MenuItem";
 import useOnClickOutside from "../../helpers/clickOutside";
-import { deletePost, savePost } from "../../functions/post";
+import { deletePost, savePost } from "../../api/functions/post";
 import { saveAs } from "file-saver";
 
 export default function PostMenu({
@@ -19,6 +19,7 @@ export default function PostMenu({
   const [test, setTest] = useState(postUserId === userId ? true : false);
   const menu = useRef(null);
   useOnClickOutside(menu, () => setShowMenu(false));
+
   const saveHandler = async () => {
     savePost(postId, token);
     if (checkSaved) {

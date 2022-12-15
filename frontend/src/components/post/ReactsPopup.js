@@ -1,35 +1,30 @@
-import { useState } from 'react';
-import { reactPost } from '../../functions/post';
-import {useSelector} from 'react-redux';
-
 const reactsArray = [
   {
-    name: 'like',
-    image: '../../../reacts/like.gif',
+    name: "like",
+    image: "../../../reacts/like.gif",
   },
   {
-    name: 'love',
-    image: '../../../reacts/love.gif',
+    name: "love",
+    image: "../../../reacts/love.gif",
   },
   {
-    name: 'haha',
-    image: '../../../reacts/haha.gif',
+    name: "haha",
+    image: "../../../reacts/haha.gif",
   },
   {
-    name: 'wow',
-    image: '../../../reacts/wow.gif',
+    name: "wow",
+    image: "../../../reacts/wow.gif",
   },
   {
-    name: 'sad',
-    image: '../../../reacts/sad.gif',
+    name: "sad",
+    image: "../../../reacts/sad.gif",
   },
   {
-    name: 'angry',
-    image: '../../../reacts/angry.gif',
+    name: "angry",
+    image: "../../../reacts/angry.gif",
   },
 ];
-export default function ReactsPopup({ visible, setVisible,reactHandler }) {
-
+export default function ReactsPopup({ visible, setVisible, reactHandler }) {
   return (
     <>
       {visible && (
