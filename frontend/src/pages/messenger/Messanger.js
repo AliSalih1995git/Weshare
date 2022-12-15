@@ -1,17 +1,18 @@
-import './style.css';
-import Header from '../../components/header';
-import Conversation from '../../components/conversation/Conversation';
-import Message from '../../components/messege/Message';
-import ChatOnline from '../../components/chatOnline/ChatOnline';
-import { useSelector } from 'react-redux';
-import { useEffect, useRef, useState } from 'react';
+import "./style.css";
+import Header from "../../components/header";
+import Conversation from "../../components/conversation/Conversation";
+import Message from "../../components/messege/Message";
+import ChatOnline from "../../components/chatOnline/ChatOnline";
+import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
 export default function Messanger() {
   const { user } = useSelector((state) => ({ ...state }));
-  
-console.log(`${user.id}`)
+
+  console.log(`${user.id}`);
+
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -40,7 +41,7 @@ console.log(`${user.id}`)
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
-    socket.current.emit("addUser", user._id);
+    socket.current.emit("addUser", user.id);
     socket.current.on("getUsers", (users) => {
       setOnlineUsers(
         user.followings.filter((f) => users.some((u) => u.userId === f))
@@ -51,13 +52,15 @@ console.log(`${user.id}`)
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/conversation/${user.id}`,{
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const res = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/getConversation/${user.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         setConversations(res.data);
-  
       } catch (err) {
         console.log(err);
       }
@@ -67,7 +70,14 @@ console.log(`${user.id}`)
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/messageGet/${currentChat?._id}`);
+        const res = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/messageGet/${currentChat?._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         setMessages(res.data);
       } catch (err) {
         console.log(err);
@@ -75,27 +85,33 @@ console.log(`${user.id}`)
     };
     getMessages();
   }, [currentChat]);
-console.log(currentChat,"AAdsdsd");
+  console.log(currentChat, "AAdsdsd");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const message = {
-      sender: user._id,
+      sender: user.id,
       text: newMessage,
       conversationId: currentChat._id,
     };
 
-    const receiverId = currentChat.members.find(
-      (member) => member !== user._id
-    );
+    const receiverId = currentChat.members.find((member) => member !== user.id);
 
     socket.current.emit("sendMessage", {
-      senderId: user._id,
+      senderId: user.id,
       receiverId,
       text: newMessage,
     });
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/messagePost`, message);
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/addMessage`,
+        message,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       setMessages([...messages, res.data]);
       setNewMessage("");
     } catch (err) {
@@ -113,10 +129,15 @@ console.log(currentChat,"AAdsdsd");
       <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            <input placeholder="Search for friends" className="chatMenuInput" />
+            <div className="search">
+              <input
+                placeholder="Search for friends"
+                className="chatMenuInput"
+              />
+            </div>
             {conversations.map((c) => (
               <div onClick={() => setCurrentChat(c)}>
-                <Conversation conversation={c} currentUser={user} />
+                <Conversation conversation={c} />
               </div>
             ))}
           </div>
@@ -128,7 +149,11 @@ console.log(currentChat,"AAdsdsd");
                 <div className="chatBoxTop">
                   {messages.map((m) => (
                     <div ref={scrollRef}>
-                      <Message message={m} own={m.sender === user._id} />
+                      <Message
+                        message={m}
+                        own={m.sender === user.id}
+                        user={user}
+                      />
                     </div>
                   ))}
                 </div>
@@ -155,7 +180,7 @@ console.log(currentChat,"AAdsdsd");
           <div className="chatOnlineWrapper">
             <ChatOnline
               onlineUsers={onlineUsers}
-              currentId={user._id}
+              currentId={user.id}
               setCurrentChat={setCurrentChat}
             />
           </div>

@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import instance from '../../api/instance';
-import Bio from './Bio';
-import EditDetails from './EditDetails';
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import instance from "../../api/instance";
 
-import './style.css';
-export default function Intro({ detailss, visitor,setOthername }) {
+import Bio from "./Bio";
+import EditDetails from "./EditDetails";
+
+import "./style.css";
+export default function Intro({ detailss, visitor, setOthername }) {
   const { user } = useSelector((state) => ({ ...state }));
   const [details, setDetails] = useState();
   const [visible, setVisible] = useState(false);
@@ -15,15 +16,15 @@ export default function Intro({ detailss, visitor,setOthername }) {
     setInfos(detailss);
   }, [detailss]);
   const initial = {
-    bio: details?.bio ? details.bio : '',
-    otherName: details?.otherName ? details.otherName : '',
-    job: details?.job ? details.job : '',
-    workplace: details?.workplace ? details.workplace : '',
-    highSchool: details?.highSchool ? details.highSchool : '',
-    college: details?.college ? details.college : '',
-    currentCity: details?.currentCity ? details.currentCity : '',
-    hometown: details?.hometown ? details.hometown : '',
-    relationship: details?.relationship ? details.relationship : '',
+    bio: details?.bio ? details.bio : "",
+    otherName: details?.otherName ? details.otherName : "",
+    job: details?.job ? details.job : "",
+    workplace: details?.workplace ? details.workplace : "",
+    highSchool: details?.highSchool ? details.highSchool : "",
+    college: details?.college ? details.college : "",
+    currentCity: details?.currentCity ? details.currentCity : "",
+    hometown: details?.hometown ? details.hometown : "",
+    relationship: details?.relationship ? details.relationship : "",
   };
   const [infos, setInfos] = useState(initial);
   const [showBio, setShowBio] = useState(false);
@@ -31,11 +32,10 @@ export default function Intro({ detailss, visitor,setOthername }) {
 
   const updateDetails = async () => {
     try {
-      const { data } = await instance.get("updateDetails",{infos,}
-      );
+      const { data } = await instance.put("updateDetails", { infos });
       setShowBio(false);
       setDetails(data);
-      setOthername(data.otherName)
+      setOthername(data.otherName);
     } catch (error) {
       console.log(error.response.data.message);
     }
@@ -45,6 +45,7 @@ export default function Intro({ detailss, visitor,setOthername }) {
     setInfos({ ...infos, [name]: value });
     setMax(100 - e.target.value.length);
   };
+
   return (
     <div className="profile_card">
       <div className="profile_card_header">Intro</div>
@@ -130,7 +131,12 @@ export default function Intro({ detailss, visitor,setOthername }) {
         </div>
       )}
       {!visitor && (
-        <button className="gray_btn hover1 w100" onClick={()=>setVisible(true)}>Edit Details</button>
+        <button
+          className="gray_btn hover1 w100"
+          onClick={() => setVisible(true)}
+        >
+          Edit Details
+        </button>
       )}
       {visible && !visitor && (
         <EditDetails

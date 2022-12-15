@@ -25,8 +25,10 @@ function Home({ setVisible, posts, loading, getAllPosts }) {
         {user.verified === false && <SendVerification user={user} />}
         <CreatePost user={user} setVisible={setVisible} />
         <div className="posts">
-          {posts.map((post) => (
-            <Post key={post._id} post={post} user={user} />
+          {posts.map((post, i) => (
+            <div key={i}>
+              <Post post={post} user={user} />
+            </div>
           ))}
         </div>
       </div>

@@ -32,8 +32,8 @@ exports.listImages = async (req, res) => {
     .then((result) => {
       res.json(result);
     })
-    .catch((err) => {
-      console.log(err.error.message);
+    .catch((error) => {
+      return res.status(500).json({ message: error.message });
     });
 };
 
