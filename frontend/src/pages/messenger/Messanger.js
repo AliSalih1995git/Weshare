@@ -1,18 +1,17 @@
-import "./style.css";
-import Header from "../../components/header";
-import Conversation from "../../components/conversation/Conversation";
-import Message from "../../components/messege/Message";
-import ChatOnline from "../../components/chatOnline/ChatOnline";
-import { useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import './style.css';
+import Header from '../../components/header';
+import Conversation from '../../components/conversation/Conversation';
+import Message from '../../components/messege/Message';
+import ChatOnline from '../../components/chatOnline/ChatOnline';
+import { useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
 import axios from "axios";
 import { io } from "socket.io-client";
 
 export default function Messanger() {
   const { user } = useSelector((state) => ({ ...state }));
-
-  console.log(`${user.id}`);
-
+  
+console.log(`${user.id}`)
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -41,7 +40,7 @@ export default function Messanger() {
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
-    socket.current.emit("addUser", user.id);
+    socket.current.emit("addUser", user._id);
     socket.current.on("getUsers", (users) => {
       setOnlineUsers(
         user.followings.filter((f) => users.some((u) => u.userId === f))
@@ -52,15 +51,13 @@ export default function Messanger() {
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/getConversation/${user.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
+        const res=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/conversation/${user.id}`,{
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
         setConversations(res.data);
+  
       } catch (err) {
         console.log(err);
       }
@@ -70,14 +67,7 @@ export default function Messanger() {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/messageGet/${currentChat?._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/messageGet/${currentChat?._id}`);
         setMessages(res.data);
       } catch (err) {
         console.log(err);
@@ -85,32 +75,27 @@ export default function Messanger() {
     };
     getMessages();
   }, [currentChat]);
+console.log(currentChat,"AAdsdsd");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const message = {
-      sender: user.id,
+      sender: user._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
 
-    const receiverId = currentChat.members.find((member) => member !== user.id);
+    const receiverId = currentChat.members.find(
+      (member) => member !== user._id
+    );
 
     socket.current.emit("sendMessage", {
-      senderId: user.id,
+      senderId: user._id,
       receiverId,
       text: newMessage,
     });
 
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/addMessage`,
-        message,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/messagePost`, message);
       setMessages([...messages, res.data]);
       setNewMessage("");
     } catch (err) {
@@ -131,7 +116,7 @@ export default function Messanger() {
             <input placeholder="Search for friends" className="chatMenuInput" />
             {conversations.map((c) => (
               <div onClick={() => setCurrentChat(c)}>
-                <Conversation conversation={c} />
+                <Conversation conversation={c} currentUser={user} />
               </div>
             ))}
           </div>
@@ -143,11 +128,7 @@ export default function Messanger() {
                 <div className="chatBoxTop">
                   {messages.map((m) => (
                     <div ref={scrollRef}>
-                      <Message
-                        message={m}
-                        own={m.sender === user.id}
-                        user={user}
-                      />
+                      <Message message={m} own={m.sender === user._id} />
                     </div>
                   ))}
                 </div>
@@ -174,7 +155,7 @@ export default function Messanger() {
           <div className="chatOnlineWrapper">
             <ChatOnline
               onlineUsers={onlineUsers}
-              currentId={user.id}
+              currentId={user._id}
               setCurrentChat={setCurrentChat}
             />
           </div>

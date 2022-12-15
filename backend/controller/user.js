@@ -187,12 +187,22 @@ exports.findUser = async (req, res) => {
   }
 };
 exports.getUser = async (req, res) => {
-  const userId = req.params.id;
   try {
+<<<<<<< HEAD
     const user = await User.findOne({ _id: userId });
     const { password, updatedAt, ...other } = user._doc;
     console.log(other);
     res.status(200).json(other);
+=======
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(400).json({
+        message: "Account does not exists.",
+      });
+    }
+    return res.status(200).json(user);
+>>>>>>> parent of 0630d76 (Chat almost complete)
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -355,6 +365,7 @@ exports.addFriend = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 exports.getFriend = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
@@ -374,6 +385,8 @@ exports.getFriend = async (req, res) => {
   }
 };
 
+=======
+>>>>>>> parent of 0630d76 (Chat almost complete)
 exports.cancelRequest = async (req, res) => {
   try {
     if (req.user.id !== req.params.id) {

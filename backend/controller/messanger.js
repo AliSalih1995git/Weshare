@@ -1,8 +1,8 @@
-const Conversation = require("../models/Conversation");
-const Message = require("../models/Message");
+const Conversation = require('../models/Conversation');
+const Message = require('../models/Message');
 
-// New conversation
-exports.newConversation = async (req, res) => {
+// post conversation
+exports.conversation = async (req, res) => {
   const newConversation = new Conversation({
     members: [req.body.senderId, req.body.receiverId],
   });
@@ -11,6 +11,7 @@ exports.newConversation = async (req, res) => {
     res.status(200).json(savedConversation);
   } catch (error) {
     return res.status(500).json({ message: error.message });
+
   }
 };
 //get conv of a user
@@ -23,7 +24,7 @@ exports.getConversation = async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-};
+}
 
 // get conv includes two userId
 exports.getFirstSecondConversation = async (req, res) => {
@@ -31,15 +32,15 @@ exports.getFirstSecondConversation = async (req, res) => {
     const conversation = await Conversation.findOne({
       members: { $all: [req.params.firstUserId, req.params.secondUserId] },
     });
-    res.status(200).json(conversation);
+    res.status(200).json(conversation)
   } catch (err) {
-    console.log(err);
+    console.log(err)
     res.status(500).json(err);
   }
-};
+}
 
-//Add message
-exports.addMessage = async (req, res) => {
+//message post
+exports.messagePost = async (req, res) => {
   const newMessage = new Message(req.body);
 
   try {
@@ -48,10 +49,11 @@ exports.addMessage = async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-};
+}
 
 //message get
 exports.messageGet = async (req, res) => {
+  console.log(req.body);
   try {
     const messages = await Message.find({
       conversationId: req.params.conversationId,
@@ -60,4 +62,4 @@ exports.messageGet = async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-};
+}

@@ -1,45 +1,32 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import "./style.css";
 
-export default function Conversation({ conversation }) {
-  const { user } = useSelector((state) => ({ ...state }));
+export default function Conversation({ conversation, currentUser }) {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-    console.log(conversation, "conversation");
-    const friendId = conversation.members.find((m) => m !== user.id);
-    console.log(friendId, "friendId");
+    const friendId = conversation.members.find((m) => m !== currentUser.id);
     const getUser = async () => {
       try {
         const res = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/getUser/${friendId}`,
           {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${currentUser.token}`,
             },
           }
         );
-        console.log(res.data, "users");
         setUsers(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     getUser();
-  }, [user, conversation]);
+  }, [currentUser, conversation]);
   return (
     <div className="conversation">
-      <img
-        className="conversationImg"
-        src={
-          users?.picture
-            ? users?.picture
-            : "https://res.cloudinary.com/dmhcnhtng/image/upload/v1643044376/avatars/default_pic_jeaybr.png"
-        }
-        alt=""
-      />
+      <img className="conversationImg" src={users?.picture} alt="" />
       <span className="conversationName"> {users?.username} </span>
     </div>
   );
